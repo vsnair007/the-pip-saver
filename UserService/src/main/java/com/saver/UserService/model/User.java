@@ -4,16 +4,21 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 
 @Entity
 @Table(name = "users")
-@Data
+@Getter
+@Setter
+@ToString
 @Builder
+@AllArgsConstructor
 public class User {
+    User(){
+    }
 
     @NotBlank
+    @Column(nullable = false)
     private String userName;
 
     @Id
@@ -27,6 +32,8 @@ public class User {
 
     @Email
     @NotBlank
+    @NotBlank
+    @Column(nullable = false)
     private String emailId;
 
     @Enumerated(EnumType.STRING)

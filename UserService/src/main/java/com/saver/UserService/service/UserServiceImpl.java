@@ -2,6 +2,7 @@ package com.saver.UserService.service;
 
 import com.saver.UserService.dto.UserDto;
 import com.saver.UserService.exception.UserAlreadyExistException;
+import com.saver.UserService.exception.UserNotFoundException;
 import com.saver.UserService.model.Role;
 import com.saver.UserService.model.User;
 import com.saver.UserService.repo.UserRepo;
@@ -23,7 +24,7 @@ public class UserServiceImpl implements UserService {
             throw new UserAlreadyExistException("A user with same email(" + user.getEmailId() + ") already exist.");
         });
         User newUser = UserMapper.toEntity(user);
-        if(newUser.getRole() == null){
+        if (newUser.getRole() == null) {
             newUser.setRole(Role.USER);
         }
         newUser = userRepo.save(newUser);
@@ -35,16 +36,23 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<UserDto> getAllUsers() {
-        return List.of();
+        return userRepo.findAll().stream().sorted().map(UserMapper::toDto).toList();
     }
 
     @Override
     public UserDto getUser(UserDto user) {
-        return null;
+        return userRepo.findById(user.getUserId()).map(UserMapper::toDto).orElseThrow(() -> new UserNotFoundException("No user found with ID: " + user.getUserId()));
     }
 
     @Override
     public String deleteUser(UserDto user) {
-        return "";
+        User existingUser = userRepo.findById(user.getUserId())
+                .orElseThrow(() -> new UserNotFoundException(
+                        "No user found with ID: " + user.getUserId()
+                ));
+
+        userRepo.delete(existingUser);
+        return "User Deleted Successfully";
     }
+
 }

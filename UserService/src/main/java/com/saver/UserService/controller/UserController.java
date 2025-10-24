@@ -23,9 +23,9 @@ public class UserController {
         return ResponseEntity.ok(userService.addUser(userDto));
     }
 
-    @GetMapping("/{id})")
-    public ResponseEntity<UserDto> getUser(@PathVariable @NotNull @NotBlank @Valid String id) {
-        return ResponseEntity.ok(userService.getUser(UserDto.builder().userId(Long.getLong(id)).build()));
+    @GetMapping("/{id}")
+    public ResponseEntity<UserDto> getUser(@PathVariable String id) {
+        return ResponseEntity.ok(userService.getUser(UserDto.builder().userId(Long.parseLong(id)).build()));
     }
 
     @GetMapping
@@ -34,8 +34,8 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteUser(@PathVariable @NotNull @NotBlank @Valid String id) {
-        return ResponseEntity.ok(userService.deleteUser(UserDto.builder().userId(Long.getLong(id)).build()));
+    public ResponseEntity<String> deleteUser(@PathVariable String id) {
+        return ResponseEntity.ok(userService.deleteUser(UserDto.builder().userId(Long.parseLong(id)).build()));
     }
 
 }
