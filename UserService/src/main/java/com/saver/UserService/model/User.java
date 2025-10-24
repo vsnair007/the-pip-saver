@@ -27,7 +27,7 @@ public class User {
 
     private String password;
 
-    @Pattern(regexp = "[0-9]{10}")
+    @Pattern(regexp = "^\\+?[1-9]\\d{1,14}$")
     private String phoneNumber;
 
     @Email

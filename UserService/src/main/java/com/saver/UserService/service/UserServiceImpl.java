@@ -24,6 +24,7 @@ public class UserServiceImpl implements UserService {
             throw new UserAlreadyExistException("A user with same email(" + user.getEmailId() + ") already exist.");
         });
         User newUser = UserMapper.toEntity(user);
+        newUser.setPassword(user.getPassword());
         if (newUser.getRole() == null) {
             newUser.setRole(Role.USER);
         }
@@ -53,6 +54,19 @@ public class UserServiceImpl implements UserService {
 
         userRepo.delete(existingUser);
         return "User Deleted Successfully";
+    }
+
+    @Override
+    public UserDto updateUser(UserDto user) {
+        if (user.getUserId() == null || user.getUserId().equals(0L)) {
+            throw new UserNotFoundException("User ID must be provided for update.");
+        }
+        userRepo.findById(user.getUserId())
+                .ifPresent(ex -> {
+                    throw new UserNotFoundException("A user with Id(" + user.getUserId() + ") not found.");
+                });
+        return UserMapper.toDto(userRepo.save(UserMapper.toEntity(user)));
+
     }
 
 }

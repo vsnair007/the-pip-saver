@@ -3,8 +3,6 @@ package com.saver.UserService.controller;
 import com.saver.UserService.dto.UserDto;
 import com.saver.UserService.service.UserService;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,7 +17,7 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping
-    public ResponseEntity<String> addUser(@RequestBody UserDto userDto) {
+    public ResponseEntity<String> addUser(@RequestBody @Valid UserDto userDto) {
         return ResponseEntity.ok(userService.addUser(userDto));
     }
 
@@ -36,6 +34,11 @@ public class UserController {
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteUser(@PathVariable String id) {
         return ResponseEntity.ok(userService.deleteUser(UserDto.builder().userId(Long.parseLong(id)).build()));
+    }
+
+    @PutMapping
+    public ResponseEntity<UserDto> updateUser(@RequestBody @Valid UserDto userDto) {
+        return ResponseEntity.ok(userService.updateUser(userDto));
     }
 
 }
