@@ -7,9 +7,9 @@ import java.util.List;
 
 @Service
 public interface UserService {
-    public String addUser(UserDto user);
-    public List<UserDto> getAllUsers();
-    public UserDto getUser(UserDto user);
-    public String deleteUser(UserDto user);
-    public UserDto updateUser(UserDto user);
+    String addUser(UserDto user);
+    List<UserDto> getAllUsers();
+    UserDto getUser(UserDto user);
+    String deleteUser(UserDto user);
+    UserDto updateUser(UserDto user);
 }
