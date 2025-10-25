@@ -1,0 +1,60 @@
+# Build outputs
+**/target/
+**/build/
+bin/
+
+# Maven
+dependency-reduced-pom.xml
+release.properties
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+buildNumber.properties
+.mvn/timing.properties
+!.mvn/wrapper/maven-wrapper.jar
+
+# IDEs
+**/.idea/
+**/.vscode/
+**/.classpath
+**/.project
+**/.settings/
+**/nbproject/private/
+*.iws
+*.iml
+*.ipr
+
+# Logs
+*.log
+*.stackdump
+hs_err_pid*
+
+# OS files
+.DS_Store
+Thumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Temp / backup
+*.tmp
+*.bak
+*.sw?
+*~
+*.orig
+*.BACKUP.*
+*_BACKUP_*.txt
+
+# Archives / packages
+*.jar
+*.war
+*.nar
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+# Misc
+.scratch
+README.html
+

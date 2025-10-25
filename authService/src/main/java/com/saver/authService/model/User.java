@@ -1,4 +1,4 @@
-package com.saver.UserService.model;
+package com.saver.authService.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
@@ -13,7 +13,7 @@ import lombok.*;
 @ToString
 @Builder
 @AllArgsConstructor
-public class User implements Comparable<User> {
+public class User {
     User(){
     }
 
@@ -39,9 +39,4 @@ public class User implements Comparable<User> {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Role role;
-
-    @Override
-    public int compareTo(User other) {
-        return this.userId.compareTo(other.userId);
-    }
 }

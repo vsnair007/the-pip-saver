@@ -9,7 +9,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class UserDto {
+public class UserDto{
     @NotNull(message = "User Name cannot be null")
     @NotBlank(message = "User Name cannot be blank")
     private String userName;
@@ -27,4 +27,5 @@ public class UserDto {
     @NotNull(message = "Email cannot be null")
     @NotBlank(message = "Email cannot be blank")
     private String emailId;
+
 }
