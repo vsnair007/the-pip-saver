@@ -66,14 +66,14 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
             HttpEntity<Void> requestEntity = new HttpEntity<>(headers);
 
-            ResponseEntity<String> authResponse = restTemplate.exchange(
+            ResponseEntity<Boolean> authResponse = restTemplate.exchange(
                     authServiceURL + "/api/v1/auth/validate",
                     HttpMethod.GET,
                     requestEntity,
-                    String.class
+                    Boolean.class
             );
 
-            if (authResponse.getStatusCode() != HttpStatus.OK) {
+            if (authResponse.getStatusCode() != HttpStatus.OK && !authResponse.getBody()) {
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 response.getWriter().write("Invalid token");
                 return;

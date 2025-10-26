@@ -1,0 +1,56 @@
+version: '3.9'
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: pip-mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpass
+      MYSQL_DATABASE: pipdb
+      MYSQL_USER: springuser
+      MYSQL_PASSWORD: SpringPass@123
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./db-init:/docker-entrypoint-initdb.d
+    networks:
+      - pipnet
+
+  auth-service:
+    build: ./authService
+    container_name: auth-service
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/pipdb
+      SPRING_DATASOURCE_USERNAME: springuser
+      SPRING_DATASOURCE_PASSWORD: SpringPass@123
+      SERVER_PORT: 8125
+    ports:
+      - "8125:8125"
+    depends_on:
+      - mysql
+    networks:
+      - pipnet
+
+  user-service:
+    build: ./UserService
+    container_name: user-service
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/pipdb
+      SPRING_DATASOURCE_USERNAME: springuser
+      SPRING_DATASOURCE_PASSWORD: SpringPass@123
+      SERVER_PORT: 8124
+    ports:
+      - "8124:8124"
+    depends_on:
+      - mysql
+    networks:
+      - pipnet
+
+volumes:
+  db_data:
+
+networks:
+  pipnet:
