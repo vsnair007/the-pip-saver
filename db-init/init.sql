@@ -1,21 +1,32 @@
-CREATE DATABASE IF NOT EXISTS pipdb;
-USE pipdb;
+-- init.sql for PostgreSQL (re-runnable)
 
+-- Create table if not exists
 CREATE TABLE IF NOT EXISTS users (
-  user_id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id SERIAL PRIMARY KEY,
   user_name VARCHAR(50) NOT NULL,
   password VARCHAR(100) NOT NULL,
   phone_number VARCHAR(15) NOT NULL,
   email_id VARCHAR(100) NOT NULL UNIQUE,
-  role ENUM('ADMIN', 'USER') NOT NULL
+  role VARCHAR(10) NOT NULL CHECK (role IN ('ADMIN', 'USER'))
 );
 
-INSERT INTO users (user_name, password, phone_number, email_id, role)
+-- Insert initial users with fixed IDs and avoid duplicates
+INSERT INTO users (user_id, user_name, password, phone_number, email_id, role)
 VALUES
-  ('AdminUser', 'user123', '+911234567890', 'admin@pip.com', 'ADMIN'),
-  ('User', 'user123', '+919876543210', 'user@pip.com', 'USER')
-ON DUPLICATE KEY UPDATE
-  user_name = VALUES(user_name),
-  password = VALUES(password),
-  phone_number = VALUES(phone_number),
-  role = VALUES(role);
+  (1, 'AdminUser', 'user123', '+911234567890', 'admin@pip.com', 'ADMIN'),
+  (2, 'User', 'user123', '+919876543210', 'user@pip.com', 'USER')
+ON CONFLICT (email_id) DO UPDATE
+SET
+  user_name = EXCLUDED.user_name,
+  password = EXCLUDED.password,
+  phone_number = EXCLUDED.phone_number,
+  role = EXCLUDED.role;
+
+-- Adjust sequence so it doesn't conflict with existing user_ids
+DO $$
+BEGIN
+  IF EXISTS (SELECT 1 FROM pg_class WHERE relname = 'users_user_id_seq') THEN
+    PERFORM setval('users_user_id_seq', (SELECT MAX(user_id) FROM users));
+  END IF;
+END
+$$;

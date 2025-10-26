@@ -15,15 +15,15 @@ FROM eclipse-temurin:21-jdk
 
 WORKDIR /app
 
-RUN apt-get update && apt-get install -y default-mysql-client
+RUN apt-get update && apt-get install -y postgresql-client
 
 # Copy the built JAR from the build stage
 COPY --from=build /app/target/*.jar app.jar
-COPY wait-for-mysql.sh /app/wait-for-mysql.sh
-RUN chmod +x wait-for-mysql.sh
+COPY wait-for-postgres.sh /app/wait-for-postgres.sh
+RUN chmod +x wait-for-postgres.sh
 
 # Expose port
 EXPOSE 8125
 
 # Run the app
-ENTRYPOINT ["sh", "-c", "./wait-for-mysql.sh mysql && java -jar app.jar"]
+ENTRYPOINT ["sh", "-c", "./wait-for-postgres.sh postgres && java -jar app.jar"]

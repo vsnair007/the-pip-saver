@@ -1,18 +1,18 @@
 version: '3.9'
 services:
-  mysql:
-    image: mysql:8.0
-    container_name: pip-mysql
+  postgres:
+    image: postgres:15
+    container_name: pip-postgres
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: rootpass
-      MYSQL_DATABASE: pipdb
-      MYSQL_USER: springuser
-      MYSQL_PASSWORD: SpringPass@123
+      POSTGRES_ROOT_PASSWORD: rootpass
+      POSTGRES_DB: pipdb
+      POSTGRES_USER: springuser
+      POSTGRES_PASSWORD: SpringPass@123
     ports:
-      - "3306:3306"
+      - "5432:5432"
     volumes:
-      - db_data:/var/lib/mysql
+      - pg_data:/var/lib/postgresql/data
       - ./db-init:/docker-entrypoint-initdb.d
     networks:
       - pipnet
@@ -22,14 +22,14 @@ services:
     container_name: auth-service
     environment:
       SPRING_PROFILES_ACTIVE: dev
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/pipdb
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/pipdb
       SPRING_DATASOURCE_USERNAME: springuser
       SPRING_DATASOURCE_PASSWORD: SpringPass@123
       SERVER_PORT: 8125
     ports:
       - "8125:8125"
     depends_on:
-      - mysql
+      - postgres
     networks:
       - pipnet
 
@@ -38,19 +38,19 @@ services:
     container_name: user-service
     environment:
       SPRING_PROFILES_ACTIVE: dev
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/pipdb
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/pipdb
       SPRING_DATASOURCE_USERNAME: springuser
       SPRING_DATASOURCE_PASSWORD: SpringPass@123
       SERVER_PORT: 8124
     ports:
       - "8124:8124"
     depends_on:
-      - mysql
+      - postgres
     networks:
       - pipnet
 
 volumes:
-  db_data:
+  pg_data:
 
 networks:
   pipnet:
