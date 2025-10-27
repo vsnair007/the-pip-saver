@@ -1,8 +1,7 @@
 package com.saver.UserService.security;
 
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
+import com.saver.UserService.dto.AuthResponse;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -66,31 +65,22 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
             HttpEntity<Void> requestEntity = new HttpEntity<>(headers);
 
-            ResponseEntity<Boolean> authResponse = restTemplate.exchange(
+            ResponseEntity<AuthResponse> authResponse = restTemplate.exchange(
                     authServiceURL + "/api/v1/auth/validate",
                     HttpMethod.GET,
                     requestEntity,
-                    Boolean.class
+                    AuthResponse.class
             );
 
-            if (authResponse.getStatusCode() != HttpStatus.OK && !authResponse.getBody()) {
+            if (authResponse.getStatusCode() != HttpStatus.OK && !authResponse.getBody().getValid()) {
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 response.getWriter().write("Invalid token");
                 return;
             }
 
-            Claims claims = Jwts.parserBuilder()
-                    .setSigningKey(secret.getBytes())
-                    .build()
-                    .parseClaimsJws(token)
-                    .getBody();
-
-            String email = claims.getSubject();
-            String role = claims.get("role", String.class);
-
-            List<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority("ROLE_" + role));
+            List<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority("ROLE_" + authResponse.getBody().getRole()));
             UsernamePasswordAuthenticationToken authToken =
-                    new UsernamePasswordAuthenticationToken(email, null, authorities);
+                    new UsernamePasswordAuthenticationToken(authResponse.getBody().getEmail(), null, authorities);
 
             SecurityContextHolder.getContext().setAuthentication(authToken);
 

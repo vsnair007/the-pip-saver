@@ -6,9 +6,10 @@ services:
     restart: always
     environment:
       POSTGRES_ROOT_PASSWORD: rootpass
-      POSTGRES_DB: pipdb
+      POSTGRES_DB: pipdb_yxid
       POSTGRES_USER: springuser
-      POSTGRES_PASSWORD: SpringPass@123
+#      POSTGRES_PASSWORD: SpringPass@123
+      POSTGRES_PASSWORD: p94WRH6yFZYGnnvo43WvcW5Gw15sVhUA
     ports:
       - "5432:5432"
     volumes:
@@ -22,9 +23,11 @@ services:
     container_name: auth-service
     environment:
       SPRING_PROFILES_ACTIVE: dev
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/pipdb
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/pipdb_yxid
+#      SPRING_DATASOURCE_URL: jdbc:postgresql://dpg-d3v513ndiees73enojng-a.singapore-postgres.render.com/pipdb_yxid?sslmode=require
       SPRING_DATASOURCE_USERNAME: springuser
-      SPRING_DATASOURCE_PASSWORD: SpringPass@123
+      SPRING_DATASOURCE_PASSWORD: p94WRH6yFZYGnnvo43WvcW5Gw15sVhUA
+      JWT_SECRET: I_don't_h@ve_feelings_@lfred._I_don't_h@ve_@ny,_I've_never_seen_one._I'm_@_night-st@lking,_crime-fighting_vigil@nte,_@nd_@_he@vy_met@l_r@pping_m@chine._I_don't_feel_@nything_emotion@lly,_except_for_r@ge._24/7,_365,_@t_@_million_percent
       SERVER_PORT: 8125
     ports:
       - "8125:8125"
@@ -38,9 +41,11 @@ services:
     container_name: user-service
     environment:
       SPRING_PROFILES_ACTIVE: dev
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/pipdb
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/pipdb_yxid
+#      SPRING_DATASOURCE_URL: jdbc:postgresql://dpg-d3v513ndiees73enojng-a.singapore-postgres.render.com/pipdb_yxid?sslmode=require
       SPRING_DATASOURCE_USERNAME: springuser
-      SPRING_DATASOURCE_PASSWORD: SpringPass@123
+      SPRING_DATASOURCE_PASSWORD: p94WRH6yFZYGnnvo43WvcW5Gw15sVhUA
+      JWT_SECRET: I_don't_h@ve_feelings_@lfred._I_don't_h@ve_@ny,_I've_never_seen_one._I'm_@_night-st@lking,_crime-fighting_vigil@nte,_@nd_@_he@vy_met@l_r@pping_m@chine._I_don't_feel_@nything_emotion@lly,_except_for_r@ge._24/7,_365,_@t_@_million_percent
       SERVER_PORT: 8124
     ports:
       - "8124:8124"

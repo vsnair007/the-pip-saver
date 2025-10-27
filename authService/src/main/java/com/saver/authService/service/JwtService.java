@@ -16,7 +16,7 @@ public class JwtService {
     private String secret;
 
     // TTL = 15 minutes = 900_000 ms
-    private final long expirationMillis = 15 * 60 * 1000;
+    private final long expirationMillis = 15L * 60L * 1000L;
 
     private Key getSigningKey() {
         return Keys.hmacShaKeyFor(secret.getBytes());
@@ -37,10 +37,29 @@ public class JwtService {
             Jwts.parserBuilder()
                     .setSigningKey(getSigningKey())
                     .build()
-                    .parseClaimsJws(token);
+                    .parseClaimsJws(token.trim());
             return true;
         } catch (Exception e) {
+            System.out.println("Token validation error: " + e.getMessage());
             return false;
         }
+    }
+
+    public String extractEmail(String token) {
+        return Jwts.parserBuilder()
+                .setSigningKey(getSigningKey())
+                .build()
+                .parseClaimsJws(token)
+                .getBody()
+                .getSubject();
+    }
+
+    public String extractRole(String token) {
+        return Jwts.parserBuilder()
+                .setSigningKey(getSigningKey())
+                .build()
+                .parseClaimsJws(token)
+                .getBody()
+                .get("role", String.class);
     }
 }

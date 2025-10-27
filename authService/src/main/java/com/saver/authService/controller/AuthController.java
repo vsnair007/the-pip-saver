@@ -1,5 +1,6 @@
 package com.saver.authService.controller;
 
+import com.saver.authService.dto.AuthResponse;
 import com.saver.authService.dto.UserDto;
 import com.saver.authService.service.AuthService;
 import jakarta.validation.Valid;
@@ -20,9 +21,8 @@ public class AuthController {
     }
 
     @GetMapping("/validate")
-    public ResponseEntity<Boolean> validateToken(@RequestHeader("Authorization") String token) {
-        System.out.println("Validating token: " + token);
-        return ResponseEntity.ok(true);
-        //return ResponseEntity.ok(authService.validateToken(token));
+    public ResponseEntity<AuthResponse> validateToken(@RequestHeader("Authorization") String token) {
+        System.out.println("Token received: " + token);
+        return ResponseEntity.ok(authService.validateToken(token));
     }
 }

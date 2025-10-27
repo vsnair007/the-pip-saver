@@ -13,8 +13,8 @@ CREATE TABLE IF NOT EXISTS users (
 -- Insert initial users with fixed IDs and avoid duplicates
 INSERT INTO users (user_id, user_name, password, phone_number, email_id, role)
 VALUES
-  (1, 'AdminUser', 'user123', '+911234567890', 'admin@pip.com', 'ADMIN'),
-  (2, 'User', 'user123', '+919876543210', 'user@pip.com', 'USER')
+  (1, 'AdminUser', '$2a$10$xLmU7ntn7rua0eLVx7ip6.OGKu3PiRsaFOEkraLqVoEHKw4Du2/ay', '+911234567890', 'admin@pip.com', 'ADMIN'),
+  (2, 'User', '$2a$10$xLmU7ntn7rua0eLVx7ip6.OGKu3PiRsaFOEkraLqVoEHKw4Du2/ay', '+919876543210', 'user@pip.com', 'USER')
 ON CONFLICT (email_id) DO UPDATE
 SET
   user_name = EXCLUDED.user_name,

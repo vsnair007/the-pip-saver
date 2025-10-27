@@ -8,6 +8,7 @@ import com.saver.UserService.model.User;
 import com.saver.UserService.repo.UserRepo;
 import com.saver.UserService.util.UserMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,16 +19,19 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepo userRepo;
 
+    private final PasswordEncoder passwordEncoder;
+
     @Override
     public String addUser(UserDto user) throws RuntimeException {
         userRepo.findByEmailId(user.getEmailId()).ifPresent(ex -> {
             throw new UserAlreadyExistException("A user with same email(" + user.getEmailId() + ") already exist.");
         });
         User newUser = UserMapper.toEntity(user);
-        newUser.setPassword(user.getPassword());
+        newUser.setPassword(passwordEncoder.encode(user.getPassword()));
         if (newUser.getRole() == null) {
             newUser.setRole(Role.USER);
         }
+        newUser.setUserId(null); 
         newUser = userRepo.save(newUser);
         if (newUser.getUserId() != null && !newUser.getUserId().equals(0L)) {
             return "Successfully Added";
