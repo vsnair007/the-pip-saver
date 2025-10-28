@@ -36,9 +36,6 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     @Value("${auth.service.url:http://localhost:8081}")
     private String authServiceURL;
 
-    @Value("${jwt.secret:my-super-secret-key}")
-    private String secret;
-
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 

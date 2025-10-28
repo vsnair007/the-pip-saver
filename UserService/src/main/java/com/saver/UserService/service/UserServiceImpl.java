@@ -31,7 +31,7 @@ public class UserServiceImpl implements UserService {
         if (newUser.getRole() == null) {
             newUser.setRole(Role.USER);
         }
-        newUser.setUserId(null); 
+        newUser.setUserId(null);
         newUser = userRepo.save(newUser);
         if (newUser.getUserId() != null && !newUser.getUserId().equals(0L)) {
             return "Successfully Added";

@@ -14,9 +14,22 @@ services:
       - "5432:5432"
     volumes:
       - pg_data:/var/lib/postgresql/data
-      - ./db-init:/docker-entrypoint-initdb.d
+#      - ./db-init:/docker-entrypoint-initdb.d
     networks:
       - pipnet
+
+  flyway:
+    image: flyway/flyway:10
+    container_name: pip-flyway
+    depends_on:
+      - postgres
+    command: -url=jdbc:postgresql://postgres:5432/pipdb_yxid -user=springuser -password=p94WRH6yFZYGnnvo43WvcW5Gw15sVhUA migrate
+    volumes:
+      - ./flyway/sql:/flyway/sql
+    networks:
+      - pipnet
+    restart: "no"
+
 
   auth-service:
     build: ./authService
@@ -33,6 +46,7 @@ services:
       - "8125:8125"
     depends_on:
       - postgres
+      - flyway
     networks:
       - pipnet
 
@@ -51,6 +65,7 @@ services:
       - "8124:8124"
     depends_on:
       - postgres
+      - flyway
     networks:
       - pipnet
 
