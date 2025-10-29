@@ -23,7 +23,7 @@ services:
     container_name: pip-flyway
     depends_on:
       - postgres
-    command: -url=jdbc:postgresql://postgres:5432/pipdb_yxid -user=springuser -password=p94WRH6yFZYGnnvo43WvcW5Gw15sVhUA migrate
+    command: -url=jdbc:postgresql://postgres:5432/pipdb_yxid -user=springuser -password=p94WRH6yFZYGnnvo43WvcW5Gw15sVhUA -connectRetries=10 migrate
     volumes:
       - ./flyway/sql:/flyway/sql
     networks:
@@ -59,7 +59,6 @@ services:
 #      SPRING_DATASOURCE_URL: jdbc:postgresql://dpg-d3v513ndiees73enojng-a.singapore-postgres.render.com/pipdb_yxid?sslmode=require
       SPRING_DATASOURCE_USERNAME: springuser
       SPRING_DATASOURCE_PASSWORD: p94WRH6yFZYGnnvo43WvcW5Gw15sVhUA
-      JWT_SECRET: I_don't_h@ve_feelings_@lfred._I_don't_h@ve_@ny,_I've_never_seen_one._I'm_@_night-st@lking,_crime-fighting_vigil@nte,_@nd_@_he@vy_met@l_r@pping_m@chine._I_don't_feel_@nything_emotion@lly,_except_for_r@ge._24/7,_365,_@t_@_million_percent
       SERVER_PORT: 8124
     ports:
       - "8124:8124"
