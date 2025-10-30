@@ -17,10 +17,29 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
+    /**
+     * Repository used for CRUD operations on User entities.
+     */
     private final UserRepo userRepo;
 
+    /**
+     * Password encoder used to hash user passwords before persisting.
+     */
     private final PasswordEncoder passwordEncoder;
 
+    /**
+     * Add a new user to the system.
+     *
+     * Process:
+     * - Ensure no existing user has the same email.
+     * - Convert the provided {@link UserDto} to a {@link User} entity.
+     * - Encode the password and set a default role if none provided.
+     * - Persist the new user and return a simple status message.
+     *
+     * @param user DTO containing user details to create
+     * @return success message when user is created, otherwise a failure message
+     * @throws UserAlreadyExistException when a user with the same email already exists
+     */
     @Override
     public String addUser(UserDto user) throws RuntimeException {
         userRepo.findByEmailId(user.getEmailId()).ifPresent(ex -> {
@@ -39,16 +58,40 @@ public class UserServiceImpl implements UserService {
         return "User Addition Failed";
     }
 
+    /**
+     * Retrieve all users from the system.
+     *
+     * The returned list is sorted according to the natural ordering of the
+     * underlying entity and mapped to {@link UserDto} objects.
+     *
+     * @return list of all users as DTOs
+     */
     @Override
     public List<UserDto> getAllUsers() {
         return userRepo.findAll().stream().sorted().map(UserMapper::toDto).toList();
     }
 
+    /**
+     * Retrieve a single user by id.
+     *
+     * @param user DTO containing the userId to look up
+     * @return the found user as a {@link UserDto}
+     * @throws UserNotFoundException when no user exists for the provided id
+     */
     @Override
     public UserDto getUser(UserDto user) {
         return userRepo.findById(user.getUserId()).map(UserMapper::toDto).orElseThrow(() -> new UserNotFoundException("No user found with ID: " + user.getUserId()));
     }
 
+    /**
+     * Delete a user by id.
+     *
+     * The method verifies that the user exists before deleting.
+     *
+     * @param user DTO containing the userId to delete
+     * @return confirmation message after successful deletion
+     * @throws UserNotFoundException when no user exists for the provided id
+     */
     @Override
     public String deleteUser(UserDto user) {
         User existingUser = userRepo.findById(user.getUserId())
@@ -60,6 +103,17 @@ public class UserServiceImpl implements UserService {
         return "User Deleted Successfully";
     }
 
+    /**
+     * Update an existing user.
+     *
+     * Requirements:
+     * - The DTO must include a valid non-zero userId.
+     * - The user must exist in the repository before update.
+     *
+     * @param user DTO containing updated user information
+     * @return the updated user as a {@link UserDto}
+     * @throws UserNotFoundException when the provided userId is missing or the user does not exist
+     */
     @Override
     public UserDto updateUser(UserDto user) {
         if (user.getUserId() == null || user.getUserId().equals(0L)) {

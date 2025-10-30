@@ -19,7 +19,7 @@ A small microservice-based Spring Boot project providing user management and aut
 the-pip-saver is a microservice, mono-repo Spring Boot application that implements:
 - `authService` — authentication-related endpoints and JWT/security concerns.
 - `UserService` — user management (CRUD, schema in `schema.sql`).
-- DB initialization and migrations using `db-init/init.sql` and `flyway/sql/V1__init.sql`.
+- DB initialization and migrations using `db-init/init.sql`(Via Docker) OR `flyway/sql/V1__init.sql`(Via flyway).
 - Containerization via `Dockerfile` in each service and orchestration via `docker-compose.yml`.
 
 ## Why the project is useful
@@ -38,7 +38,7 @@ Top-level important files and directories:
 - `UserService/` — user microservice (Spring Boot)
     - `Dockerfile`, `wait-for-postgres.sh`, `src/`
 
-Check service configuration in `src/main/resources` for each service: `application.properties`, `application-dev.properties`, `application-prod.properties`.
+Check service configuration in `src/main/resources` for each service: `application.properties`, `application-dev.properties`, `application-prod.properties`, Also check for Enviromentel Variables in `docker-compose.yml`
 
 ## Getting started
 

@@ -42,8 +42,11 @@ services:
       SPRING_DATASOURCE_PASSWORD: p94WRH6yFZYGnnvo43WvcW5Gw15sVhUA
       JWT_SECRET: I_don't_h@ve_feelings_@lfred._I_don't_h@ve_@ny,_I've_never_seen_one._I'm_@_night-st@lking,_crime-fighting_vigil@nte,_@nd_@_he@vy_met@l_r@pping_m@chine._I_don't_feel_@nything_emotion@lly,_except_for_r@ge._24/7,_365,_@t_@_million_percent
       SERVER_PORT: 8125
+      AUTH_SRERVICE_MANAGEMENT_PORT: 9001
     ports:
       - "8125:8125"
+    expose:
+      - "9001"
     depends_on:
       - postgres
       - flyway
@@ -60,13 +63,46 @@ services:
       SPRING_DATASOURCE_USERNAME: springuser
       SPRING_DATASOURCE_PASSWORD: p94WRH6yFZYGnnvo43WvcW5Gw15sVhUA
       SERVER_PORT: 8124
+      USER_SRERVICE_MANAGEMENT_PORT: 9002
+      AUTH_SERVICE_URL: http://auth-service:8125
     ports:
       - "8124:8124"
+    expose:
+      - "9002"
     depends_on:
       - postgres
       - flyway
     networks:
       - pipnet
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    restart: always
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+    ports:
+      - "9090:9090"
+    networks:
+      - pipnet
+    depends_on:
+      - auth-service
+      - user-service
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    restart: always
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    ports:
+      - "3000:3000"
+    networks:
+      - pipnet
+    depends_on:
+      - prometheus
 
 volumes:
   pg_data:

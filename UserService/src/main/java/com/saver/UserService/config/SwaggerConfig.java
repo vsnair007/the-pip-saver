@@ -14,11 +14,6 @@ public class SwaggerConfig {
 
     @Bean
     public OpenAPI pipSaverOpenAPI() {
-//        return new OpenAPI()
-//                .info(new Info()
-//                        .title("The PIP Saver - User Management API")
-//                        .description("CRUD operations and authentication for users.")
-//                        .version("v1.0"));
 
         final String securitySchemeName = "bearerAuth";
 
