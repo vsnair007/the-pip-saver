@@ -11,7 +11,10 @@ RUN mvn dependency:go-offline -B
 COPY src ./src
 
 # Build the JAR
-RUN mvn clean package -DskipTests
+#RUN mvn clean package -DskipTests
+RUN mvn clean verify -DskipTests=false
+
+# -Dspring.profiles.active=test
 
 # Stage 2: Runtime
 FROM eclipse-temurin:21-jdk

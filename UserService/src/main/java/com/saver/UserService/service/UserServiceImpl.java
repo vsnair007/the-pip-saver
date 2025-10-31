@@ -120,7 +120,7 @@ public class UserServiceImpl implements UserService {
             throw new UserNotFoundException("User ID must be provided for update.");
         }
         userRepo.findById(user.getUserId())
-                .ifPresent(ex -> {
+                .orElseThrow(() -> {
                     throw new UserNotFoundException("A user with Id(" + user.getUserId() + ") not found.");
                 });
         return UserMapper.toDto(userRepo.save(UserMapper.toEntity(user)));
